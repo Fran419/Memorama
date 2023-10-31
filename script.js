@@ -1,6 +1,8 @@
 const button4x3 = document.getElementById("btn4x3");
 const button4x4 = document.getElementById("btn4x4");
 const button5x4 = document.getElementById("btn4x5");
+const resetButton = document.getElementById("resetButton");
+const newGameButton = document.getElementById("newGameButton");
 const dimensionButtonsContainer = document.getElementById("dimensionButtons");
 const gameContainer = document.querySelector('.memory-game');
 let numRows = 4;
@@ -10,9 +12,11 @@ let isCardFlipped = false;
 let isBoardLocked = false;
 let firstFlippedCard, secondFlippedCard;
 
-button4x3.addEventListener("click", () => changeBoardSize(numRows = 4, numCols = 3));
-button4x4.addEventListener("click", () => changeBoardSize(numRows = 4, numCols = 4));
-button5x4.addEventListener("click", () => changeBoardSize(numRows = 4, numCols = 5));
+button4x3.addEventListener("click", () => changeBoardSize(4, 3));
+button4x4.addEventListener("click", () => changeBoardSize(4, 4));
+button5x4.addEventListener("click", () => changeBoardSize(4, 5));
+resetButton.addEventListener("click", resetGame);
+newGameButton.addEventListener("click", startNewGame);
 
 initializeGameBoard(numRows, numCols);
 
@@ -33,6 +37,17 @@ function initializeGameBoard(newRows, newCols) {
 
     cardDeck = shuffleMemoryCards(cardDeck);
     createGameBoard(newRows, newCols);
+}
+
+function resetGame() {
+    cardDeck = shuffleMemoryCards(cardDeck);
+    resetGameBoard();
+    hideAllCards();
+}
+
+function startNewGame() {
+    // Puedes cambiar las dimensiones del nuevo juego aquí
+    initializeGameBoard(numRows, numCols);
 }
 
 function createGameBoard(newRows, newCols) {
@@ -75,24 +90,13 @@ function checkForCardMatch() {
     }
 }
 
-function isGameComplete() {
-    const matchedCards = document.querySelectorAll('.memory-card.matched');
-    return matchedCards.length === cardDeck.length;
-}
-
-
 function disableMatchedCards() {
     firstFlippedCard.removeEventListener('click', () => flipMemoryCard(firstFlippedCard));
     secondFlippedCard.removeEventListener('click', () => flipMemoryCard(secondFlippedCard));
     firstFlippedCard.classList.add('matched');
     secondFlippedCard.classList.add('matched');
     resetGameBoard();
-
-    if (isGameComplete()) {
-        console.log("¡Felicidades, Ganaste!");
-    }
 }
-
 
 function unflipMismatchedCards() {
     isBoardLocked = true;
