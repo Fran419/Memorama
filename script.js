@@ -93,7 +93,10 @@ function disableMatchedCards() {
     secondFlippedCard.removeEventListener('click', () => flipMemoryCard(secondFlippedCard));
     firstFlippedCard.classList.add('matched');
     secondFlippedCard.classList.add('matched');
-    resetGameBoard();
+    resetGameBoard();    
+    setTimeout(() => {
+        isGameComplete()
+    }, 500); ;
 }
 
 function unflipMismatchedCards() {
@@ -136,4 +139,11 @@ function hideAllCards() {
         card.classList.remove('matched');
         setCardStyle(card);
     });
+}
+function isGameComplete() {
+    const matchedCards = document.querySelectorAll('.memory-card.matched');
+    if (matchedCards.length === cardDeck.length){
+        alert("¡Felicidades, Ganaste!");   
+    }
+    else{}
 }
