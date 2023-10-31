@@ -75,13 +75,24 @@ function checkForCardMatch() {
     }
 }
 
+function isGameComplete() {
+    const matchedCards = document.querySelectorAll('.memory-card.matched');
+    return matchedCards.length === cardDeck.length;
+}
+
+
 function disableMatchedCards() {
     firstFlippedCard.removeEventListener('click', () => flipMemoryCard(firstFlippedCard));
     secondFlippedCard.removeEventListener('click', () => flipMemoryCard(secondFlippedCard));
     firstFlippedCard.classList.add('matched');
     secondFlippedCard.classList.add('matched');
     resetGameBoard();
+
+    if (isGameComplete()) {
+        console.log("¡Felicidades, Ganaste!");
+    }
 }
+
 
 function unflipMismatchedCards() {
     isBoardLocked = true;
