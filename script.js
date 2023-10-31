@@ -39,9 +39,7 @@ function initializeGameBoard(newRows, newCols) {
     createGameBoard(newRows, newCols);
 }
 
-function resetGame() {
-    cardDeck = shuffleMemoryCards(cardDeck);
-    resetGameBoard();
+function resetGame() {    
     hideAllCards();
 }
 
@@ -129,4 +127,13 @@ function shuffleMemoryCards(array) {
         [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
     }
     return shuffledArray;
+}
+
+function hideAllCards() {
+    const allCards = document.querySelectorAll('.memory-card');
+    allCards.forEach(card => {
+        card.classList.remove('flipped');
+        card.classList.remove('matched');
+        setCardStyle(card);
+    });
 }
