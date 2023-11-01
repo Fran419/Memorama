@@ -68,6 +68,10 @@ function createGameBoard(newRows, newCols) {
     gameContainer.style.gridTemplateRows = `repeat(${newRows}, 150px)`;
 
     cardDeck.forEach(card => gameContainer.appendChild(card));
+    startTime = null;
+    elapsedTime = 0;
+    const timerElement = document.getElementById("timer");
+    timerElement.textContent = "Tiempo: 0 segundos";
 }
 
 function createMemoryCard(number) {
@@ -171,10 +175,15 @@ function isGameComplete() {
 function startNewGame() {
     initializeGameBoard(numRows, numCols);
 
-    // Iniciar el cronómetro
-    startTime = new Date().getTime();
-    intervalId = setInterval(updateTimer, 1000);
+    // reset el cronómetro
+
+    startTime = null;
+    clearInterval(intervalId);
+    elapsedTime = 0;
+    const timerElement = document.getElementById("timer");
+    timerElement.textContent = "Tiempo: 0 segundos";
 }
+
 function updateTimer() {
     const currentTime = new Date().getTime();
     elapsedTime = Math.floor((currentTime - startTime) / 1000);
