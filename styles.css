@@ -6,13 +6,17 @@ body {
     height: 100vh;
     margin: 0;
     background-image: url('./img/fondo.jpg');
-    overflow: hidden;
 }
 
 img {
     max-width: 100px;
     text-align:center;
     margin-bottom: -140px;
+}
+
+#timer {
+    color: white;
+    font-size: 30px;
 }
 
 .dimension-buttons {
