@@ -11,6 +11,9 @@ let cardDeck = [];
 let isCardFlipped = false;
 let isBoardLocked = false;
 let firstFlippedCard, secondFlippedCard;
+let startTime = null;
+let elapsedTime = 0;
+let intervalId = null;
 
 button4x3.addEventListener("click", () => changeBoardSize(4, 3));
 button4x4.addEventListener("click", () => changeBoardSize(4, 4));
@@ -37,10 +40,22 @@ function initializeGameBoard(newRows, newCols) {
 
     cardDeck = shuffleMemoryCards(cardDeck);
     createGameBoard(newRows, newCols);
+
+    // Iniciar el cronómetro
+    startTime = null;
+    clearInterval(intervalId);
+    elapsedTime = 0;
 }
 
 function resetGame() {    
     hideAllCards();
+
+    // Detener y reiniciar el cronómetro
+    clearInterval(intervalId);
+    startTime = null;
+    elapsedTime = 0;
+    const timerElement = document.getElementById("timer");
+    timerElement.textContent = "Tiempo: 0 segundos";
 }
 
 function startNewGame() {
@@ -53,6 +68,10 @@ function createGameBoard(newRows, newCols) {
     gameContainer.style.gridTemplateRows = `repeat(${newRows}, 150px)`;
 
     cardDeck.forEach(card => gameContainer.appendChild(card));
+    startTime = null;
+    elapsedTime = 0;
+    const timerElement = document.getElementById("timer");
+    timerElement.textContent = "Tiempo: 0 segundos";
 }
 
 function createMemoryCard(number) {
@@ -65,6 +84,11 @@ function createMemoryCard(number) {
 }
 
 function flipMemoryCard(card) {
+    if (!startTime) {
+        startTime = new Date().getTime();
+        intervalId = setInterval(updateTimer, 1000);
+    }
+
     if (isBoardLocked || card === firstFlippedCard || card.classList.contains('matched')) return;
 
     card.classList.add('flipped');
@@ -79,6 +103,7 @@ function flipMemoryCard(card) {
         checkForCardMatch();
     }
 }
+
 
 function checkForCardMatch() {
     if (firstFlippedCard.dataset.cardNumber === secondFlippedCard.dataset.cardNumber) {
@@ -146,4 +171,29 @@ function isGameComplete() {
         alert("¡Felicidades, Ganaste!");   
     }
     else{}
+}
+function startNewGame() {
+    initializeGameBoard(numRows, numCols);
+
+    // reset el cronómetro
+
+    startTime = null;
+    clearInterval(intervalId);
+    elapsedTime = 0;
+    const timerElement = document.getElementById("timer");
+    timerElement.textContent = "Tiempo: 0 segundos";
+}
+
+function updateTimer() {
+    const currentTime = new Date().getTime();
+    elapsedTime = Math.floor((currentTime - startTime) / 1000);
+    const timerElement = document.getElementById("timer");
+    timerElement.textContent = `Tiempo: ${elapsedTime} segundos`;
+}
+function isGameComplete() {
+    const matchedCards = document.querySelectorAll('.memory-card.matched');
+    if (matchedCards.length === cardDeck.length) {
+        clearInterval(intervalId); // Detener el cronómetro
+        alert(`¡Felicidades, Ganaste! Tu tiempo fue de ${elapsedTime} segundos`);
+    }
 }
