@@ -14,14 +14,91 @@ let firstFlippedCard, secondFlippedCard;
 let startTime = null;
 let elapsedTime = 0;
 let intervalId = null;
-
+let url="https://memorama-a3310-default-rtdb.firebaseio.com/Ranking";
 button4x3.addEventListener("click", () => changeBoardSize(4, 3));
 button4x4.addEventListener("click", () => changeBoardSize(4, 4));
 button5x4.addEventListener("click", () => changeBoardSize(4, 5));
 resetButton.addEventListener("click", resetGame);
 newGameButton.addEventListener("click", startNewGame);
 
+
 initializeGameBoard(numRows, numCols);
+async function Submmitscore(){
+    let player=window.prompt();
+    let time=elapsedTime;
+    try {
+            let jugador = {
+                Nombre : player,
+                Tiempo : time,
+            };
+            const config= {
+                method:'POST',
+                body : JSON.stringify(jugador),
+                headers: {'Content-type' : 'application/json; charset=UTF-8'}
+            }
+            const response = await fetch(`${url}.json`,config);
+            const data = await response.json();
+    } catch (error) {
+            console.error("Error",error);
+    }
+    window.alert("Puntuacion enviada");
+    
+}
+
+window.onload = function() {
+    Score("tabla4x3");
+};
+
+function Score(tabid) {
+    tid = tabid;
+    consultarAsync();
+}
+
+function renderTable(data) {
+    console.log(data);
+    let tbody = document.getElementById("HS");
+    let rowHTML = "";
+    let arreglo = [];
+
+    Object.keys(data).forEach(key => {
+        console.log(data[key]);
+        if (data[key].Modo === tid) { // Corregido el uso de ${} innecesario
+            arreglo.push([data[key].Tiempo, data[key].Nombre]); // Corregido el uso de ${} innecesario
+        }
+    });
+
+    console.log(arreglo);
+    arreglo.sort(sortFunction);
+
+    for (let i = 0; i < arreglo.length; i++) {
+        rowHTML += `<tr>
+        <td>${arreglo[i][1]}</td>
+        <td>${arreglo[i][0]}</td>
+    </tr>`;
+    }
+
+    console.log(rowHTML);
+    tbody.innerHTML = rowHTML;
+}
+
+function sortFunction(a, b) {
+    if (a[0] === b[0]) {
+        return 0;
+    } else {
+        return (a[0] < b[0]) ? -1 : 1;
+    }
+}
+
+async function consultarAsync() {
+    try {
+        const response = await fetch(`${url}.json`); 
+        const alumnos = await response.json();
+        rendertable(alumnos);
+        console.log("hola mundo");
+    } catch (error) {
+        console.error("Error", error);
+    }
+}
 
 function changeBoardSize(newRows, newCols) {
     initializeGameBoard(newRows, newCols);
@@ -194,6 +271,7 @@ function isGameComplete() {
     const matchedCards = document.querySelectorAll('.memory-card.matched');
     if (matchedCards.length === cardDeck.length) {
         clearInterval(intervalId); // Detener el cronómetro
+        Submmitscore();
         alert(`¡Felicidades, Ganaste! Tu tiempo fue de ${elapsedTime} segundos`);
     }
 }
