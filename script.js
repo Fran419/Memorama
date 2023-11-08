@@ -26,10 +26,12 @@ initializeGameBoard(numRows, numCols);
 async function Submmitscore(){
     let player=window.prompt();
     let time=elapsedTime;
+    let mode=numCols;
     try {
             let jugador = {
                 Nombre : player,
                 Tiempo : time,
+                Modo : mode,
             };
             const config= {
                 method:'POST',
@@ -54,7 +56,7 @@ function Score(tabid) {
     consultarAsync();
 }
 
-function renderTable(data) {
+/*function renderTable(data) {
     console.log(data);
     let tbody = document.getElementById("HS");
     let rowHTML = "";
@@ -66,7 +68,6 @@ function renderTable(data) {
             arreglo.push([data[key].Tiempo, data[key].Nombre]); // Corregido el uso de ${} innecesario
         }
     });
-
     console.log(arreglo);
     arreglo.sort(sortFunction);
 
@@ -79,6 +80,29 @@ function renderTable(data) {
 
     console.log(rowHTML);
     tbody.innerHTML = rowHTML;
+}*/
+
+function rendertable(data){
+    console.log(data);
+    let tbody=document.getElementById("HS");
+    let rowHTML ="";
+    var arreglo=[];
+    Object.keys(data).forEach(key =>{
+        console.log(data[key]);
+        if(data[key].Modo === tid){
+            arreglo.push([data[key].Tiempo,data[key].Nombre]);
+        }
+    });
+    console.log(arreglo);
+    arreglo.sort(sortFunction);
+    for(let i=0;i<arreglo.length;i++){
+        rowHTML += `<tr>
+        <td>${arreglo[i][1]}</td>
+        <td>${arreglo[i][0]}</td>
+    </tr>`;
+    }
+    console.log(rowHTML);
+    tbody.innerHTML =rowHTML;
 }
 
 function sortFunction(a, b) {

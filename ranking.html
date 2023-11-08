@@ -3,11 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raking de jugadores</title>
-    <h1>Marcadores</h1>
-    
+    <title>Ranking de Memorama</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    
+    <h1>Ranking de Memorama</h1>
+    <div class="ranking-table">
+        <table style="display: block;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        border-spacing: 2px;
+        margin: auto;
+        width: 100px; 
+        height: 15px;">
+            <thead>
+                <tr style="background-color: orangered;
+                border: 2px solid black;
+                width: 100px; 
+                height: 15px;">
+                    <th>Posición</th>
+                    <th>Nombre</th>
+                    <th>Tiempo (segundos)</th>
+                </tr>
+            </thead>
+            <tbody id="ranking-data" style="background-color: orangered;
+            border: 2px solid black;
+            width: 100px; 
+            height: 15px;">
+                <!-- Aquí se mostrarán los datos del ranking -->
+
+            </tbody>
+        </table>
+    </div>
+    <script src="ranking.js"></script>
 </body>
 </html>
